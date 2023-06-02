@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="ad.size" content="width=320, height=50" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="" />
+        <title>MCD_McAuto</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="https://s0.2mdn.net/ads/studio/cached_libs/tweenmax_2.1.2_min.js"></script>
+        <script
+            type="text/javascript"
+            charset="utf-8"
+            src="scripts/funciones.js"
+        ></script>
+    </head>
+    <script type="text/javascript">
+        var clickTag = "";
+    </script>
+
+    <style type="text/css">
+        
+        * {
+            position: absolute;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0
+        }
+
+        
+        .bg_mc {
+            top: -12px;
+            left: -2px;
+            text-align: center;
+            position: absolute;
+            /* z-index: 0; */
+            /* width: 100%; */
+            /* right: 210px; */
+            /* bottom: -10px; */
+        }
+
+        .text_1 {
+            top: 13px;
+            left: 118px;
+            text-align: center;
+            position: absolute;
+            /* z-index: 0; */
+            /* width: 100%; */
+            /* right: 210px; */
+            /* bottom: -10px; */
+        }
+
+        .text_2 {
+            top: 0px;
+            left: 0px;
+            text-align: center;
+            position: absolute;
+            /* z-index: 0; */
+            /* width: 100%; */
+            /* right: 210px; */
+            /* bottom: -10px; */
+            display: none;
+        }
+
+        .ad {
+            width: 320px;
+            height: 50px;
+            border: 1px solid #000;
+            background-color: transparent;
+            z-index: 10;
+            cursor: pointer;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            background: #00809a;
+        }
+
+        .ad:hover {
+            animation: shake 150ms 2 linear;
+            -moz-animation: shake 150ms 2 linear;
+            -webkit-animation: shake 150ms 2 linear;
+            -o-animation: shake 150ms 2 linear
+        }
+        @keyframes shake {
+            0 {
+                transform: translate(3px, 0)
+            }
+            50% {
+                transform: translate(-3px, 0)
+            }
+            100% {
+                transform: translate(0, 0)
+            }
+        }
+        @-moz-keyframes shake {
+            0 {
+                -moz-transform: translate(3px, 0)
+            }
+            50% {
+                -moz-transform: translate(-3px, 0)
+            }
+            100% {
+                -moz-transform: translate(0, 0)
+            }
+        }
+        @-webkit-keyframes shake {
+            0 {
+                -webkit-transform: translate(3px, 0)
+            }
+            50% {
+                -webkit-transform: translate(-3px, 0)
+            }
+            100% {
+                -webkit-transform: translate(0, 0)
+            }
+        }
+        @-ms-keyframes shake {
+            0 {
+                -ms-transform: translate(3px, 0)
+            }
+            50% {
+                -ms-transform: translate(-3px, 0)
+            }
+            100% {
+                -ms-transform: translate(0, 0)
+            }
+        }
+        @-o-keyframes shake {
+            0 {
+                -o-transform: translate(3px, 0)
+            }
+            50% {
+                -o-transform: translate(-3px, 0)
+            }
+            100% {
+                -o-transform: translate(0, 0)
+            }
+        }
+
+
+        
+    </style>
+
+    <body>
+        <a href="javascript:window.open(window.clickTag)">
+            <div class="ad"><div class="bg_mc"><img src="./assets/bg_mc.jpg" alt=""></div>
+<div class="text_1"><img src="./assets/text_1.png" alt=""></div>
+<div class="text_2"><img src="./assets/text_2.png" alt=""></div></div>
+        </a>
+    </body>
+    <script src="./index.js"></script>
+</html>
