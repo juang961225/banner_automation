@@ -1,36 +1,74 @@
-const psd = require("psd");
 const fs = require("fs");
-const { exit } = require("process");
-const PNG = require("pngjs").PNG;
+const path = require("path");
+const PSD = require("psd");
 
-// Ruta al archivo PSD
-const psdFilePath = "../banners__aCrear/MCD_McAuto__320x100/300x100_Verano.psd";
+// Ruta del archivo PSD
+const psdPath = "../banners__aCrear/MCD_McAuto__300x250/300x250.psd";
 
-// Cargar el archivo PSD
-const psdFile = psd.fromFile(psdFilePath);
+// Carga el archivo PSD
+PSD.open(psdPath)
+    .then((psd) => {
+        const layerTree = psd.tree();
 
-// Obtener las capas del archivo PSD
-const tree = psdFile.tree();
-const layers = tree.descendants();
+        // Función recursiva para obtener las capas de píxeles (imágenes)
+        function getPixelLayers(layers) {
+            const pixelLayers = [];
 
-// Iterar sobre las capas y guardar las imágenes en archivos PNG
-layers.forEach((layer) => {
-    // Obtener los datos de píxeles de la capa
-    const pixels = layer.layer.image.toPng();
+            layers.forEach((layer) => {
+                if (layer.isGroup()) {
+                    // Si es un grupo, se exploran las capas internas
+                    pixelLayers.push(...getPixelLayers(layer.children()));
+                } else {
+                    // Si es una capa de píxeles, se agrega a la lista
+                    pixelLayers.push(layer);
+                }
+            });
 
-    // Crear un objeto PNG y asignar los datos de píxeles
-    const png = new PNG();
-    png.width = layer.layer.width;
-    png.height = layer.layer.height;
-    png.data = pixels;
+            return pixelLayers;
+        }
 
-    // Guardar la imagen en un archivo PNG
-    const fileName = `capa_${layer.layer.name}.png`;
-    const filePath = `./${fileName}`;
+        // Obtener todas las capas de píxeles (imágenes)
+        const pixelLayers = getPixelLayers(layerTree.children());
 
-    png.pack().pipe(fs.createWriteStream(filePath));
+        if (pixelLayers.length > 0) {
+            console.log(`Imágenes encontradas:`);
 
-    console.log(
-        `Imagen de la capa ${layer.layer.name} guardada en ${filePath}`
-    );
-});
+            // Recorrer todas las capas de píxeles (imágenes)
+            pixelLayers.forEach((layer, index) => {
+                // Verificar si la capa tiene una representación de imagen válida
+                if (layer.image && typeof layer.image.toPng === "function") {
+                    // Obtener información de tamaño y posición de la capa
+                    const width = layer.width;
+                    const height = layer.height;
+                    const left = layer.left;
+                    const top = layer.top;
+                    const layerName = layer.name;
+
+                    console.log(`- Tamaño: ${width}x${height}`);
+                    console.log(
+                        `  Posición: ${left}px desde la izquierda, ${top}px desde la parte superior`
+                    );
+
+                    // Guardar la imagen en disco
+                    const imageBuffer = layer.image.toPng();
+                    const imageName = `${layerName.replace(
+                        /[^a-zA-Z0-9]/g,
+                        "_"
+                    )}.png`;
+                    const imagePath = path.join(__dirname, imageName);
+                    fs.writeFileSync(imagePath, imageBuffer);
+
+                    console.log(`  Imagen guardada: ${imageName}`);
+                } else {
+                    console.log(
+                        `- Capa "${layer.name}" no tiene una representación de imagen válida.`
+                    );
+                }
+            });
+        } else {
+            console.log("No se encontraron imágenes en el archivo PSD.");
+        }
+    })
+    .catch((err) => {
+        console.error("Error al abrir el archivo PSD:", err);
+    });

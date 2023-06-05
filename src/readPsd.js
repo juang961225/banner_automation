@@ -122,89 +122,113 @@
 // });
 
 // ____________________________________________________________________________________
+// const PSD = require("psd");
+
+// // Ruta del archivo PSD
+// const psdPath = "../banners__aCrear/MCD_McAuto__300x250/300x250.psd";
+
+// // Carga el archivo PSD
+// PSD.open(psdPath)
+//     .then((psd) => {
+//         // Verificar si hay un lienzo y obtener sus dimensiones
+//         if (psd.tree().children.length > 0) {
+//             const rootNode = psd.tree().children[0];
+//             const canvasWidth = rootNode.width;
+//             const canvasHeight = rootNode.height;
+//             console.log(`Tamaño del lienzo: ${canvasWidth}x${canvasHeight}`);
+
+//             // Verificar si hay grupos de capas
+//             if (rootNode.children && rootNode.children.length > 0) {
+//                 const groups = rootNode.children.filter((child) =>
+//                     child.isGroup()
+//                 );
+
+//                 if (groups.length > 0) {
+//                     // Seleccionar el primer grupo de capas
+//                     const selectedGroup = groups[0];
+//                     console.log(`Grupo seleccionado: ${selectedGroup.name}`);
+
+//                     // Verificar si hay capas dentro del grupo seleccionado
+//                     if (
+//                         selectedGroup.children &&
+//                         selectedGroup.children.length > 0
+//                     ) {
+//                         const layers = selectedGroup.children.filter((child) =>
+//                             child.isPixelLayer()
+//                         );
+
+//                         if (layers.length > 0) {
+//                             console.log(`Imágenes encontradas:`);
+
+//                             // Obtener información de tamaño y posición de cada imagen
+//                             layers.forEach((layer) => {
+//                                 const width = layer.width;
+//                                 const height = layer.height;
+//                                 const left = layer.left;
+//                                 const top = layer.top;
+
+//                                 console.log(`- Tamaño: ${width}x${height}`);
+//                                 console.log(
+//                                     `  Posición: ${left}px desde la izquierda, ${top}px desde la parte superior`
+//                                 );
+//                             });
+//                         } else {
+//                             console.log(
+//                                 "No se encontraron imágenes dentro del grupo de capas."
+//                             );
+//                         }
+//                     } else {
+//                         console.log(
+//                             "No hay capas dentro del grupo de capas seleccionado."
+//                         );
+//                     }
+//                 } else {
+//                     console.log("No se encontraron grupos de capas.");
+//                 }
+//             } else {
+//                 console.log("No hay grupos de capas en el archivo PSD.");
+//             }
+//         } else {
+//             console.log("El archivo PSD no contiene un lienzo válido.");
+//         }
+//     })
+//     .catch((err) => {
+//         console.error("Error al abrir el archivo PSD:", err);
+//     });
+
+//______________________________________________________________________________________________
+const fs = require("fs");
+const path = require("path");
 const PSD = require("psd");
 
 // Ruta del archivo PSD
-const psdPath = "ruta/del/archivo.psd";
+const psdPath = "../banners__aCrear/MCD_McAuto__300x250/300x250.psd";
 
 // Carga el archivo PSD
 PSD.open(psdPath)
     .then((psd) => {
-        // Verificar si hay un lienzo y obtener sus dimensiones
-        if (psd.header && psd.header.width && psd.header.height) {
-            const canvasWidth = psd.header.width;
-            const canvasHeight = psd.header.height;
-            console.log(`Tamaño del lienzo: ${canvasWidth}x${canvasHeight}`);
+        const layerTree = psd.tree();
 
-            // Verificar si hay grupos de capas
-            if (
-                psd.tree().export().children &&
-                psd.tree().export().children.length > 0
-            ) {
-                const groups = psd
-                    .tree()
-                    .export()
-                    .children.filter((child) => child.type === "group");
+        // Obtener todas las capas en el árbol de capas
+        const layers = layerTree.descendants();
 
-                if (groups.length > 0) {
-                    // Seleccionar el primer grupo de capas
-                    const selectedGroup = groups[0];
-                    console.log(`Grupo seleccionado: ${selectedGroup.name}`);
+        // Filtrar solo las capas visibles
+        const visibleLayers = layers.filter((layer) => layer.visible());
 
-                    // Verificar si hay capas dentro del grupo seleccionado
-                    if (
-                        selectedGroup.children &&
-                        selectedGroup.children.length > 0
-                    ) {
-                        const layers = selectedGroup.children.filter(
-                            (child) => child.type === "layer"
-                        );
+        // Recorrer las capas y mostrar la información
+        visibleLayers.forEach((layer) => {
+            // Obtener información de la capa
+            const layerName = layer.get("name");
+            const top = layer.get("top");
+            const left = layer.get("left");
+            const width = layer.get("width");
+            const height = layer.get("height");
 
-                        if (layers.length > 0) {
-                            // Verificar si hay imágenes dentro del grupo de capas
-                            const images = layers.filter((layer) =>
-                                layer.isPixelLayer()
-                            );
-
-                            if (images.length > 0) {
-                                console.log(`Imágenes encontradas:`);
-
-                                // Obtener información de tamaño y posición de cada imagen
-                                images.forEach((image) => {
-                                    const width = image.width();
-                                    const height = image.height();
-                                    const left = image.left;
-                                    const top = image.top;
-
-                                    console.log(`- Tamaño: ${width}x${height}`);
-                                    console.log(
-                                        `  Posición: ${left}px desde la izquierda, ${top}px desde la parte superior`
-                                    );
-                                });
-                            } else {
-                                console.log(
-                                    "No se encontraron imágenes dentro del grupo de capas."
-                                );
-                            }
-                        } else {
-                            console.log(
-                                "No se encontraron capas dentro del grupo de capas."
-                            );
-                        }
-                    } else {
-                        console.log(
-                            "No hay capas dentro del grupo de capas seleccionado."
-                        );
-                    }
-                } else {
-                    console.log("No se encontraron grupos de capas.");
-                }
-            } else {
-                console.log("No hay grupos de capas en el archivo PSD.");
-            }
-        } else {
-            console.log("El archivo PSD no contiene un lienzo válido.");
-        }
+            // Imprimir información en la consola
+            console.log(`- Nombre: ${layerName}`);
+            console.log(`  Posición: (${left}, ${top})`);
+            console.log(`  Dimensiones: ${width}x${height}`);
+        });
     })
     .catch((err) => {
         console.error("Error al abrir el archivo PSD:", err);
