@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "gsap": "^3.11.5",
     "psd": "^3.4.0"
   }
 }
