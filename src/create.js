@@ -396,5 +396,3 @@ const startProcess = () => {
 };
 
 startProcess(); // Inicia la ejecución del script
-
-process.exit(0);
