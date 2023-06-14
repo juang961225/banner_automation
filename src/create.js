@@ -28,6 +28,13 @@ const folderLocation = "../banners__aCrear"; // Ruta de la carpeta donde se encu
 const outPutFolder = "../build"; // Ruta de la carpeta de salida donde se generarán los banners
 
 /**
+ * checks if string includes "__email"
+ * @param {str} name 
+ * @returns boolean
+ */
+const isEmail = (name) => name.includes("__email");
+
+/**
  * this function prepares the folder and performs
  *  the banner creation process for each of the folders
  *  that you have.
@@ -38,7 +45,9 @@ const createBaseFolders = (list) => {
     list.forEach((element) => {
         const folderPath = path.join(__dirname, outPutFolder, element); // Genera la ruta completa de la carpeta de salida para cada elemento
         fs.mkdirSync(folderPath); // Crea la carpeta de salida para cada elemento
-        fs.writeFileSync(path.join(folderPath, "index.js"), ""); // Crea un archivo vacío llamado 'index.js' en la carpeta creada
+        if (!isEmail(element)) {
+            fs.writeFileSync(path.join(folderPath, "index.js"), ""); // Crea un archivo vacío llamado 'index.js' en la carpeta creada
+        }
     });
 };
 
@@ -65,10 +74,9 @@ const getbannerData = (element) => {
 const elementMarkup = (fileName, type = "bannerHtml") => {
     const [name, special] = fileName.split("."); // Obtiene el nombre base del archivo eliminando la extensión
 
-    return markups[special === 'link' ? 'emailHtmlLink' : type ](name, fileName);
+    return markups[special === 'link' ? 'emailHtmlLink' : type](name, fileName);
 };
 
-const isEmail = (name) => name.includes("__email");
 
 /**
  * executes all the logic to create the html structure with its style and base script
