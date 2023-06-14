@@ -88,7 +88,8 @@ const createHtmlFiles = (list) => {
         "./template/indexbanner.html",
         "utf8"
     ); // Lee el contenido del archivo 'index.html' de la carpeta 'template'
-    const baseEmailHtml = fs.readFileSync("./template/indexEmail.html", "utf8");
+    let client = "indexEmail"
+    const baseEmailHtml = fs.readFileSync(`./template/${client}.html`, "utf8");
     const baseJs = fs.readFileSync("./template/index.js", "utf8"); // Lee el contenido del archivo 'index.js' de la carpeta 'template'
 
     // crear html por cada folderLocation
