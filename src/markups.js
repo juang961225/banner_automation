@@ -18,7 +18,7 @@ exports.markups = {
                     max-width: 600px;
                     display: block;
                 "
-                src="./assets/${fileName}"
+                src="./img/${fileName}"
                 alt="${name}"
             />
         </td>
@@ -36,7 +36,7 @@ exports.markups = {
                         max-width: 600px;
                         display: block;
                     "
-                    src="./assets/${fileName}"
+                    src="./img/${fileName}"
                     alt="${name}"
                 />
             </a>
