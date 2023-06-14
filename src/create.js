@@ -83,7 +83,7 @@ const elementMarkup = (fileName, type = "bannerHtml") => {
     return markups[special === 'link' ? 'emailHtmlLink' : type](name, fileName);
 };
 
-
+ 
 /**
  * executes all the logic to create the html structure with its style and base script
  * @param {string} list
