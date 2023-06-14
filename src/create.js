@@ -15,7 +15,6 @@
     j. Muestra un mensaje de éxito en la consola.
     En resumen, este código automatiza la creación de los archivos HTML y JS para cada banner en la carpeta banners__aCrear, generando el marcado y estilos necesarios.
  */
-
 const { getFileList, prepareEnvironment, copyAssets } = require("./utils");
 const { markups } = require("./markups");
 
@@ -26,6 +25,13 @@ const path = require("path"); // Módulo 'path' para trabajar con rutas de archi
 // constants
 const folderLocation = "../banners__aCrear"; // Ruta de la carpeta donde se encuentran los banners a crear
 const outPutFolder = "../build"; // Ruta de la carpeta de salida donde se generarán los banners
+const emailOptions = {
+    "BB--": "indexEmailBB.html",
+    "CL--": "indexEmailCL.html",
+    "EL--": "indexEmailEL.html",
+    "JM--": "indexEmailJM.html",
+    "MC--": "indexEmailMC.html",
+};
 
 /**
  * checks if string includes "__email"
@@ -77,28 +83,42 @@ const elementMarkup = (fileName, type = "bannerHtml") => {
     return markups[special === 'link' ? 'emailHtmlLink' : type](name, fileName);
 };
 
-
+ 
 /**
  * executes all the logic to create the html structure with its style and base script
  * @param {string} list
  */
 const createHtmlFiles = (list) => {
+
     // leer plantilla
     const baseBannerHtml = fs.readFileSync(
         "./template/indexbanner.html",
         "utf8"
     ); // Lee el contenido del archivo 'index.html' de la carpeta 'template'
-    let client = "indexEmail"
-    const baseEmailHtml = fs.readFileSync(`./template/${client}.html`, "utf8");
+
+    let baseEmailHtml = fs.readFileSync(`./template/indexEmail.html`, "utf8");
     const baseJs = fs.readFileSync("./template/index.js", "utf8"); // Lee el contenido del archivo 'index.js' de la carpeta 'template'
 
     // crear html por cada folderLocation
     list.forEach((element) => {
         let baseHtml = isEmail(element) ? baseEmailHtml : baseBannerHtml;
+
+        if (isEmail(element)) {
+            const option = Object.keys(emailOptions).find((key) => element.includes(key));
+            if (option) {
+                const fileName = emailOptions[option];
+                baseHtml = fs.readFileSync(`./template/${fileName}`, "utf8");
+            }
+        }
         const { width, height, name } = getbannerData(element); // Obtiene el ancho, alto y nombre del banner a partir del título de la carpeta
 
-        const assetsDestination = path.join(`../build/${element}`, "assets"); // Genera la ruta completa de la carpeta de activos en la carpeta de salida
-        const assetFolder = `${folderLocation}/${element}/assets`; // Ruta de la carpeta de activos del banner
+        const assetsDestination = isEmail(element)
+            ? path.join(`../build/${element}`, "img")
+            : path.join(`../build/${element}`, "assets");
+        const assetFolder = isEmail(element)
+            ? `${folderLocation}/${element}/img`
+            : `${folderLocation}/${element}/assets`;
+        // Ruta de la carpeta de activos del banner
         const bannerAssets = fs.existsSync(assetFolder)
             ? getFileList(assetFolder)
             : []; // Obtiene la lista de activos del banner (imágenes) si la carpeta existe, de lo contrario, es un array vacío

@@ -5,3 +5,5 @@ build
 .DS_Store
 .nyc
 .env
+.DS_Store
+package-lock.json
