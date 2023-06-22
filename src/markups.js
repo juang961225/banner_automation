@@ -1,6 +1,6 @@
 exports.markups = {
-    jsAnimation:(name) => `.from(".${name}", 3, { x: 40, height: "100px", ease: Back.easeOut}, "primero")`,
-    cssNode:(name) => `
+    jsAnimation: (name) => `.from(".${name}", 3, { x: 40, height: "100px", ease: Back.easeOut}, "primero")`,
+    cssNode: (name) => `
     .${name} {
         top: 0px;
         left: 0px;
@@ -8,34 +8,29 @@ exports.markups = {
         position: absolute;
         /* z-index: 0; */
     }`,
-    bannerHtml:(name, fileName) => `<div class="${name}"><img src="./assets/${fileName}" alt=""></div>`,
-    emailHtml:(name, fileName) => `                        
+    bannerHtml: (name, fileName) => `<div class="${name}"><img src="./assets/${fileName}" alt=""></div>`,
+    emailHtml: (name, fileName) => `                        
     <tr>
         <td>
             <img
-                style="
-                    width: 100%;
-                    max-width: 600px;
-                    display: block;
-                "
+                style="width: 100%;
+                    display: block;"
                 src="./img/${fileName}"
                 alt="${name}"
             />
         </td>
     </tr>`,
-    emailHtmlLink:(name, fileName) =>  `                        
+    emailHtmlLink: (name, fileName) => `                        
     <tr>
         <td>
             <a
                 href="__link__"
                 target="_blank"
+                style="text-decoration: none;"
             >
                 <img
-                    style="
-                        width: 100%;
-                        max-width: 600px;
-                        display: block;
-                    "
+                    style="width: 100%;
+                        display: block;"
                     src="./img/${fileName}"
                     alt="${name}"
                 />
